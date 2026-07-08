@@ -7,7 +7,6 @@
 ![CMake](https://img.shields.io/badge/CMake-3.22+-064F8C.svg)
 ![Formats](https://img.shields.io/badge/formats-VST3_|_Standalone-orange.svg)
 
-![Screenshot](docs/screenshot.png)
 
 ## How it works
 

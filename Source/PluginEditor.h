@@ -12,6 +12,7 @@ namespace Theme
     const juce::Colour gridLine   { 0xff23262b };
     const juce::Colour accent     { 0xff4dbf9e };  // mint green
     const juce::Colour accentSide { 0xffe09b4d };  // orange (side/S in the reference)
+    const juce::Colour warn       { 0xffc75450 };  // clip / hot level
     const juce::Colour text       { 0xffd0d4d9 };
     const juce::Colour textDim    { 0xff8b929b };
 }
@@ -48,6 +49,7 @@ public:
     void mouseUp    (const juce::MouseEvent&) override;
     void mouseEnter (const juce::MouseEvent&) override;
     void mouseExit  (const juce::MouseEvent&) override;
+    void mouseDoubleClick (const juce::MouseEvent&) override;
 
     /** Room dimensions, used only for the readout display. The distance shown
         is the straight line from the listener (bottom centre) to the source. */
@@ -55,20 +57,39 @@ public:
     static constexpr float roomWidthMetres = 10.0f;
 
 private:
-    void drawReadout (juce::Graphics&, juce::Rectangle<float> padBounds,
-                      juce::Point<float> dot) const;
-
-    bool mouseIsOver = false;
     void parameterChanged (const juce::String&, float) override;
     void handleAsyncUpdate() override { repaint(); }
     void updateFromMouse (const juce::MouseEvent&);
     juce::Point<float> dotPosition() const;
+    void drawReadout (juce::Graphics&, juce::Rectangle<float> padBounds,
+                      juce::Point<float> dot) const;
+
+    bool mouseIsOver = false;
 
     juce::AudioProcessorValueTreeState& apvts;
     juce::RangedAudioParameter& panParam;
     juce::RangedAudioParameter& distParam;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (RoomPad)
+};
+
+//==============================================================================
+/** Vertical peak meter fed from an atomic written by the audio thread. */
+class LevelMeter : public juce::Component,
+                   private juce::Timer
+{
+public:
+    LevelMeter (std::atomic<float>& source, const juce::String& labelText);
+    void paint (juce::Graphics&) override;
+
+private:
+    void timerCallback() override;
+
+    std::atomic<float>& source;
+    juce::String label;
+    float displayDb = -60.0f;
+
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LevelMeter)
 };
 
 //==============================================================================
@@ -102,14 +123,22 @@ public:
     void resized() override;
 
 private:
+    void updateAbButtons();
+
     SoundPlacementLookAndFeel lookAndFeel;
 
     SoundPlacementProcessor& processor;
 
     RoomPad pad;
+    LevelMeter inMeter, outMeter;
     juce::OwnedArray<KnobCard> cards;
-    juce::TextButton bypassButton { "BYPASS" };
-    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> bypassAttachment;
+
+    juce::ComboBox presetBox;
+    juce::TextButton abAButton { "A" }, abBButton { "B" }, abCopyButton { "COPY" };
+    juce::TextButton wetSoloButton { "WET" }, monoButton { "MONO" }, bypassButton { "BYPASS" };
+
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment>
+        wetSoloAttachment, monoAttachment, bypassAttachment;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SoundPlacementEditor)
 };

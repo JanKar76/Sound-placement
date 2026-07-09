@@ -16,8 +16,8 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(JUCE)
 
 juce_add_plugin(SoundPlacement
-    COMPANY_NAME "None"
-    PLUGIN_MANUFACTURER_CODE 
+    COMPANY_NAME "JanKarlsson"
+    PLUGIN_MANUFACTURER_CODE Jank
     PLUGIN_CODE Sndp
     FORMATS VST3 Standalone
     PRODUCT_NAME "Sound Placement"

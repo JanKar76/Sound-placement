@@ -7,6 +7,7 @@
 ![CMake](https://img.shields.io/badge/CMake-3.22+-064F8C.svg)
 ![Formats](https://img.shields.io/badge/formats-VST3_|_Standalone-orange.svg)
 
+![Screenshot](docs/screenshot.png)
 
 ## How it works
 
@@ -33,11 +34,20 @@ The reverb is `juce::dsp::Convolution` running a synthetic impulse response: exp
 | Distance | 0 … 1 | Near … far |
 | Room Size | 0 … 1 | RT60 0.4–3.0 s, also scales reflection times |
 | Early Reflections | 0 … 1 | Multi-tap reflection level (distance-scaled) |
+| Reverb Low Cut | 20 … 500 Hz | Highpass on the wet path (mud control) |
+| Reverb Tone | 0 … 1 | Lowpass on the wet path, dark … neutral |
+| Reverb Duck | 0 … 1 | Direct signal ducks the reverb; it blooms in gaps |
+| Depth Amount | 0 … 1 | Macro scaling all distance cues at once |
 | Mid Level | −60 … +6 dB | Gain for the mid (L+R) signal |
 | Side Level | −60 … +6 dB | Gain for the side (L−R) signal |
 | Output | −24 … +12 dB | Output trim |
 | Mix | 0 … 1 | Global dry/wet |
+| Wet Solo | on/off | Monitor the reverb path only |
+| Mono Check | on/off | Collapse output to mono for compatibility checks |
 | Bypass | on/off | Also exposed to the host via `getBypassParameter()` |
+
+The UI adds in/out peak meters, a factory preset menu, and A/B compare with
+copy. Double-click the room pad to reset the source to centre front.
 
 Hover over the pad for a readout of the pan amount and the straight-line distance (in metres) from listener to source.
 
@@ -65,13 +75,13 @@ sudo apt install libasound2-dev libx11-dev libxext-dev libxrandr-dev \
 - Binaural HRTF mode for headphones
 - Doppler when automating the position
 - Automatic motion (LFO paths around the room)
+- Persist window size and A/B slots in the session state
 
 Contributions and issues welcome.
 
 ## License
 
-Copyright © 2026<img width="1250" height="1340" alt="SoundPlacement" src="https://github.com/user-attachments/assets/39bb652d-b150-4941-a920-50a4ac5b1773" />
-
+Copyright © 2026.
 
 This project is licensed under the **GNU Affero General Public License v3.0** — see [LICENSE](LICENSE).
 

@@ -7,7 +7,8 @@
 ![CMake](https://img.shields.io/badge/CMake-3.22+-064F8C.svg)
 ![Formats](https://img.shields.io/badge/formats-VST3_|_Standalone-orange.svg)
 
-![Screenshot](docs/screenshot.png)
+<img width="1464" height="1396" alt="image" src="https://github.com/user-attachments/assets/7947fc20-ac48-445a-b93c-648b3ec61f6b" />
+
 
 ## How it works
 
